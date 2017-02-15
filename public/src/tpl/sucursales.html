@@ -1,0 +1,45 @@
+<div class="bg-light lter b-b wrapper-md">
+  <h1 class="m-n font-thin h3">Sucursales</h1>
+</div>
+<div class="wrapper-md">
+ 
+  <toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container> 
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <button type="button" ng-click="createItem()" class="btn btn-sm btn-success"><i class="glyphicon glyphicon-plus"></i> Nuevo Registro</button>
+    </div>
+    <div class="panel-body">
+      <div class="row mb20">
+        <div class="col-sm-6">
+          <input type="text" ng-model="tableParams.filter()['search']" class="form-control" placeholder="Buscar" autofocus />
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <table id="tabla-registros" ng-table="tableParams" class="table table-striped" template-pagination="tpl/blocks/pagination.html">
+            <tbody>
+            <tr ng-repeat="(key, item) in $data">
+              <td data-title="'#'" filter="{ 'id': 'text' }" sortable="'id'" >{{ item.id }}</td>
+              <td data-title="'Codigo'" filter="{ 'codigo': 'text' }" sortable="'codigo'">{{ item.codigo }}</td>
+              <td data-title="'Cadena'" filter="{ 'cadena': 'text' }" sortable="'cadena'" >{{ item.cadena }}</td>
+              <td data-title="'Tienda'" filter="{ 'tienda': 'text' }" sortable="'tienda'" >{{ item.tienda }}</td>
+              <td data-title="'Direccion'" filter="{ 'direccion': 'text' }" sortable="'direccion'" >{{ item.direccion }}</td>
+              <td data-title="'Departamento'" filter="{ 'departamento': 'text' }" sortable="'departamento'" >{{ item.departamento }}</td>
+              <td data-title="'Municipio'" filter="{ 'municipio': 'text' }" sortable="'municipio'" >{{ item.municipio }}</td>
+              <td data-title="'Region'" filter="{ 'region': 'text' }" sortable="'region'" >{{ item.region }}</td>
+              <td data-title="'Supervisor'" filter="{ 'cadena': 'text' }" sortable="'cadena'" >{{ item.supervisor }}</td>
+              <td data-title="'Acciones'">
+                <button type="button" ng-click="editItem(item)" class="btn btn-xs btn-info">
+                  <i class="fa fa-edit"></i>
+                </button>
+                
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

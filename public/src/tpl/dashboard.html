@@ -1,0 +1,154 @@
+<div class="bg-light lter b-b wrapper-md">
+  <h1 class="m-n font-thin h3">Dashboard</h1>
+</div>
+<div class="wrapper-md">
+
+  <!-- tasks -->
+  <div class="panel wrapper">
+    <div class="row">
+      <div class="col-md-12">            
+        <div class="row row-sm">
+          <div class="col-xs-3 text-center">
+            <div ui-jq="easyPieChart" ui-options="{
+                percent: 100,
+                lineWidth: 4,
+                trackColor: '{{app.color.light}}',
+                barColor: '{{app.color.success}}',
+                scaleColor: false,
+                size: 115,
+                rotate: 90,
+                lineCap: 'butt'
+              }" class="inline m-t">
+              <div>
+                <span class="text-success h4" >{{entradas_pdv}}</span>
+              </div>
+            </div>
+            <div class="text-muted font-bold text-xs m-t m-b">Entradas de PDV</div>
+          </div>
+          <div class="col-xs-3 text-center">
+            <div ui-jq="easyPieChart" ui-options="{
+                percent: 100,
+                lineWidth: 4,
+                trackColor: '{{app.color.light}}',
+                barColor: '{{app.color.danger}}',
+                scaleColor: false,
+                size: 115,
+                rotate: 180,
+                lineCap: 'butt'
+              }" class="inline m-t">
+              <div>
+                <span class="text-danger h4" >{{salidas_almuerzo}}</span>
+              </div>
+            </div>
+            <div class="text-muted font-bold text-xs m-t m-b">Salidas de Almuerzo</div>
+          </div>
+          <div class="col-xs-3 text-center">
+            <div ui-jq="easyPieChart" ui-options="{
+                percent: 100,
+                lineWidth: 4,
+                trackColor: '{{app.color.light}}',
+                barColor: '{{app.color.success}}',
+                scaleColor: false,
+                size: 115,
+                rotate: 90,
+                lineCap: 'butt'
+              }" class="inline m-t">
+              <div>
+                <span class="text-success h4" >{{entradas_almuerzo}}</span>
+              </div>
+            </div>
+            <div class="text-muted font-bold text-xs m-t m-b">Entradas de Almuerzo</div>
+          </div>
+          <div class="col-xs-3 text-center">
+            <div ui-jq="easyPieChart" ui-options="{
+                percent: 100,
+                lineWidth: 4,
+                trackColor: '{{app.color.light}}',
+                barColor: '{{app.color.danger}}',
+                scaleColor: false,
+                size: 115,
+                rotate: 180,
+                lineCap: 'butt'
+              }" class="inline m-t">
+              <div>
+                <span class="text-danger h4" >{{salidas_pdv}}</span>
+              </div>
+            </div>
+            <div class="text-muted font-bold text-xs m-t m-b">Salidas de PDV</div>
+          </div>
+        </div>            
+      </div>
+    </div>
+  </div>
+  <!-- / tasks -->
+ 
+  <toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container> 
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      	ASISTENCIAS DE VENDEDORES DESDE EL PUNTO DE VENTA
+    </div>
+    <div class="panel-body">
+	  <div class="row mb20">
+        <div class="col-sm-6">
+          <input type="text" ng-model="tableParams.filter()['search']" class="form-control" placeholder="Buscar" autofocus />
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <table id="tabla-registros" ng-table="tableParams" class="table table-striped" template-pagination="tpl/blocks/pagination.html">
+            <tbody>
+            <tr ng-repeat="(key, item) in $data">
+              <td data-title="'#'" filter="{ 'id': 'text' }" sortable="'id'" >{{ item.id }}</td>
+              <td data-title="'Telefono'" filter="{ 'telefono': 'text' }" >{{ item.numero }}</td>
+              <td data-title="'Vendedor'" filter="{ 'vendedor': 'text' }" >{{ item.nombre_vendedor }}</td>
+              <td data-title="'Marcaje'" filter="{ 'marcaje': 'text' }" >{{ item.entrada }}</td>
+              <td data-title="'Latitud'" filter="{ 'latitud': 'text' }" >{{ item.latitud }}</td>
+              <td data-title="'Longitud'" filter="{ 'longitud': 'text' }" >{{ item.longitud }}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel panel-default" style="margin-top: 20px;">
+    <div class="panel-heading">
+      	REPORTE DE VENDEDORES
+    </div>
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-sm-12">
+          <table id="tabla-registros-reportes" class="table table-striped">
+          	<thead>
+          	<tr>
+          		<th>#</th>
+          		<th>Telefono Vendedor</th>
+              <th>Codigo Vendedor</th>
+          		<th>Nombre Vendedor</th>
+              <th>Telefono Venta</th>
+          		<th>Monto</th>
+              <th>Incidencia</th>
+          	</tr>
+          	</thead>
+            <tbody>
+            <tr ng-repeat="(key, item) in dataReportes">
+              <td >{{ item.id }}</td>
+              <td >{{ item.telefono }}</td>
+              <td >{{ item.codigo_vendedor }}</td>
+              <td >{{ item.nombre_vendedor }}</td>
+              <td >{{ item.numero }}</td>
+              <td >{{ item.monto }}</td>
+              <td >{{ item.incidencia == 0 ? 'No existe incidencia' : item.incidencia == 1 ? 'NM' : item.incidencia == 2 ? 'NN' : item.incidencia ? 'NP' : '' }}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+</div>

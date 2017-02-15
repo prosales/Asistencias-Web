@@ -1,0 +1,113 @@
+<div class="bg-light lter b-b wrapper-md">
+  <h1 class="m-n font-thin h3">Reportes</h1>
+</div>
+<div class="wrapper-md">
+ 
+  <toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
+
+  <div class="tab-container">
+    <ul class="nav nav-tabs" role="tablist">
+      <li ng-class="moduloTab == 1 ? 'active' : ''" ng-click="selectedTab(1)"><a data-toggle="tab" >Reporte de ventas</a></li>
+      <li ng-class="moduloTab == 2 ? 'active' : ''" ng-click="selectedTab(2)"><a data-toggle="tab" >Reporte de asistencias</a></li>
+    </ul>
+    <div class="tab-content">
+
+      <div class="tab-pane " ng-class="moduloTab == 1 ? 'active' : ''">
+        <div class="row mb20">
+          <div class="col-sm-3">
+            <input type="date" ng-model="filtro_ventas.fecha_inicio" class="form-control" placeholder="Fecha Inicio" />
+          </div>
+          <div class="col-sm-3">
+            <input type="date" ng-model="filtro_ventas.fecha_fin" class="form-control" placeholder="Fecha Fin" />
+          </div>
+          <div class="col-sm-3">
+            <button class="btn btn-info" ng-click="consultar_ventas()">Buscar</button>
+            <button class="btn btn-success" ng-click="exportar_ventas()">Exportar Excel</button>
+          </div>
+        </div>
+        <div class="row mb20">
+          <div class="col-sm-6">
+            <input type="text" ng-model="tableParamsVentas.filter()['search']" class="form-control" placeholder="Buscar" autofocus />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+          <div class="table-responsive">
+            <table id="tabla-registros" ng-table="tableParamsVentas" class="table table-striped" template-pagination="tpl/blocks/pagination.html">
+              <tbody>
+              <tr ng-repeat="(key, item) in $data">
+                <td data-title="'CEMP'" filter="{ 'CEMP': 'text' }"  >{{ item.cemp }}</td>
+                <td data-title="'COD PDV'" filter="{ 'COD_PDV': 'text' }"  >{{ item.codigo_pdv }}</td>
+                <td data-title="'COD VENDEDOR'" filter="{ 'COD_VENDEDOR': 'text' }"  >{{ item.codigo_vendedor }}</td>
+                <td data-title="'TIENDA'" filter="{ 'TIENDA': 'text' }"  >{{ item.tienda }}</td>
+                <td data-title="'ASESOR'" filter="{ 'ASESOR': 'text' }"  >{{ item.nombre_vendedor }}</td>
+                <td data-title="'NUMERO STAFF'" filter="{ 'NUMERO_STAFF': 'text' }"  >{{ item.numero_staff }}</td>
+                <td data-title="'SUPERVISOR'" filter="{ 'SUPERVISOR': 'text' }"  >{{ item.supervisor }}</td>
+                <td data-title="'CADENA'" filter="{ 'CADENA': 'text' }"  >{{ item.cadena }}</td>
+                <td data-title="'CANAL'" filter="{ 'CANAL': 'text' }"  >{{ item.canal }}</td>
+                <td data-title="'CIUDAD'" filter="{ 'CIUDAD': 'text' }"  >{{ item.departamento }}</td>
+                <td data-title="'TOTAL VENTAS'" filter="{ 'TOTAL VENTAS': 'text' }"  >{{ item.ventas }}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-pane " ng-class="moduloTab == 2 ? 'active' : ''">
+        <div class="row mb20">
+          <div class="col-sm-3">
+            <input type="date" ng-model="filtro_asistencias.fecha_inicio" class="form-control" placeholder="Fecha Inicio" />
+          </div>
+          <div class="col-sm-3">
+            <input type="date" ng-model="filtro_asistencias.fecha_fin" class="form-control" placeholder="Fecha Fin" />
+          </div>
+          <div class="col-sm-3">
+            <button class="btn btn-info" ng-click="consultar_asistencias()">Buscar</button>
+            <button class="btn btn-success" ng-click="exportar_asistencias()">Exportar Excel</button>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-12">
+          <div class="table-responsive">
+            <table id="tabla-registros" class="table table-striped">
+              <thead>
+              <tr>
+                <th>CEMP</th>
+                <th>COD PDV</th>
+                <th>COD VENDEDOR</th>
+                <th>TIENDA</th>
+                <th>ASESOR</th>
+                <th>NUMERO STAFF</th>
+                <th>SUPERVISOR</th>
+                <th>CADENA</th>
+                <th>CANAL</th>
+                <th ng-repeat="item in fechas">{{item.fecha}}</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr ng-repeat="item in asistencias">
+                <td>{{ item.cemp }}</td>
+                <td>{{ item.codigo_pdv }}</td>
+                <td>{{ item.codigo_vendedor }}</td>
+                <td>{{ item.tienda }}</td>
+                <td>{{ item.nombre_vendedor }}</td>
+                <td>{{ item.numero_staff }}</td>
+                <td>{{ item.supervisor }}</td>
+                <td>{{ item.cadena }}</td>
+                <td>{{ item.canal }}</td>
+                <td ng-repeat="asistencia in item.asistencias">{{ asistencia.asistio }}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,38 @@
+<div class="modal-header">
+    <h3 class="modal-title">{{settings.modal}}</h3>
+</div>
+<div class="modal-body">
+
+	<div class="col-sm-6">
+	    <div class="form-group">
+		    <label>Numero</label>
+		    <input type="text" class="form-control" ng-model="item.numero" ng-keypress="($event.which === 13)?savePhone(item):0" >
+		</div>
+	</div>
+	<div class="row">
+	    <div class="col-sm-12">
+	      <table id="tabla-registros" class="table table-striped">
+	        <thead>
+	        <tr>
+	        	<th># Telefono</th>
+	        	<th>Acciones</th>
+	        </tr>
+	        </thead>
+	        <tbody>
+	        <tr ng-repeat="(key, value) in item.telefonos">
+	          <td>{{ value.numero }}</td>
+	          <td>
+	            <button type="button" ng-click="deletePhone(value)" class="btn btn-xs btn-danger">
+	              <i class="fa fa-trash-o"></i>
+	            </button>
+	          </td>
+	        </tr>
+	        </tbody>
+	      </table>
+	    </div>
+	</div>
+
+</div>
+<div class="modal-footer">                  
+    <button class="btn btn-default" ng-click="hide()">Cerrar</button>
+</div>
