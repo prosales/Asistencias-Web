@@ -13,7 +13,7 @@ class Vendedores extends Model
      */
     protected $table = 'vendedores';
     protected $fillable = [
-        'id_sucursal', 'nombre', 'codigo', 'telefono', 'usuario', 'password'
+        'id_sucursal', 'nombre', 'codigo', 'telefono', 'usuario', 'password', 'estado'
     ];
 
     protected $casts = [

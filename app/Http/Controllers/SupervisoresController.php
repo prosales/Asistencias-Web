@@ -5,9 +5,10 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use DB;
-use App\Usuarios;
+use App\Supervisores;
+use Carbon\Carbon;
 
-class UsuariosController extends Controller
+class SupervisoresController extends Controller
 {
     public $message = "";
     public $result = false;
@@ -18,7 +19,7 @@ class UsuariosController extends Controller
     {
         try
         {
-            $this->records     =   Usuarios::all();
+            $this->records     =   Supervisores::all();
             $this->message     =   "Consulta exitosa";
             $this->result      =   true;
             $this->statusCode  =   200;
@@ -48,12 +49,12 @@ class UsuariosController extends Controller
         {
             $Registro   =   DB::transaction(function() use ($request)
             {
-                $Registro = Usuarios::create
+                $Registro = Supervisores::create
                 ([
-                    'nombre'        =>  $request->input( 'nombre' ),
-                    'usuario'       =>  $request->input( 'usuario' ),
-                    'password'      =>  bcrypt($request->input('password')),
-                    'tipo'			=>	$request->input( 'tipo' )
+                    'nombre'            =>  $request->input( 'nombre' ),
+                    'telefono'          =>  $request->input( 'telefono' ),
+                    'usuario'           =>  $request->input( 'usuario' ),
+                    'password'          =>  $request->input( 'password' )
                 ]);
                 if( !$Registro )            {throw new \Exception('Registro no se creo');}
                 else                        {return $Registro;}
@@ -86,7 +87,7 @@ class UsuariosController extends Controller
     {
         try
         {
-            $registro =   Usuarios::find($id);
+            $registro =   Supervisores::find($id);
             if($registro)
             {
                 $this->records      =   $registro;
@@ -127,12 +128,12 @@ class UsuariosController extends Controller
         {
             $Registro   =   DB::transaction(function() use ($request,$id)
             {
-                $record                             =   Usuarios::find($id);
+                $record                             =   Supervisores::find($id);
                 $record->nombre                     =   $request->input( 'nombre', $record->nombre );
+                $record->telefono                   =   $request->input( 'telefono', $record->telefono );
                 $record->usuario                    =   $request->input( 'usuario', $record->usuario );
-                $record->tipo                    	=   $request->input( 'tipo', $record->tipo );
-                if($request->input('password'))
-                    $record->password                      =   bcrypt($request->input( 'password'));
+                $record->password                   =   $request->input( 'password', $record->password );
+                $record->estado                     =   $request->input( 'estado', $record->estado );
                 
                 $record->save();
                 return $record;                                 
@@ -166,7 +167,7 @@ class UsuariosController extends Controller
     {
         try
         {
-            $this->result       =   Usuarios::destroy($id);
+            $this->result       =   Supervisores::destroy($id);
             $this->message      =   "Eliminado correctamente";
             $this->statusCode   =   200;
         }
@@ -191,55 +192,52 @@ class UsuariosController extends Controller
 
     public function login(Request $request)
     {
-        
-        $rules = array(
-            'usuario'  => 'required', 
-            'password' => 'required|min:3'
-        );
+        try
+        {
+            $usuario = $request->input("usuario");
+            $password = $request->input("password");
 
-        
-        $validator = \Validator::make($request->all(), $rules);
-        $response = [];
-        
-        if ($validator->fails()) {
-
-         $response = 
-            [
-                'message'   =>  "Todos los campos son obligatorios",
-                'result'    =>  false,
-                'records'   => []
-            ];
-        } else {
-
-            $userdata = array(
-                'usuario'     => $request->input('usuario'),
-                'password'  => $request->input('password')
-            );
-
-            
-            if (\Auth::attempt($userdata)) {
-                
-                $response = 
-                [
-                    'message'   =>  "Bienvenido",
-                    'result'    =>  true,
-                    'records'   => \Auth::user()
-                ];
-
-            } else {        
-                $response = 
-                [
-                    'message'   =>  "Credenciales incorrectas",
-                    'result'    =>  false,
-                    'records'   => []
-                ];
-                
-                
-
+            if($usuario!="" && $password!="")
+            {
+                $registro = Supervisores::whereRaw("usuario = ? AND password = ?", [$usuario, $password])->first();
+                if($registro)
+                {
+                    $this->records      =   $registro;
+                    $this->result       =   true;
+                    $this->message      =   "Bienvenido";
+                    $this->statusCode   =   200;
+                }
+                else
+                {
+                    $this->result       =   false;
+                    $this->message      =   "El usuario o password incorrecto";
+                    $this->statusCode   =   200;
+                }
             }
-
+            else
+            {
+                $this->result       =   false;
+                $this->message      =   "El usuario y password es obligatorio";
+                $this->statusCode   =   200;
+            }
         }
-        return response()->json($response, $this->statusCode);
+        catch (\Exception $e)
+        {
+            $this->statusCode   =   200;
+            $this->message      =   env('APP_DEBUG')?$e->getMessage():'Registro no se actualizo';
+            $this->result       =   false;
+        }
+        finally
+        {
+            $response = 
+            [
+                'message'   =>  $this->message,
+                'result'    =>  $this->result,
+                'records'   =>  $this->records
+            ];
+            
+            return response()->json($response, $this->statusCode);
+        }
     }
 
 }

@@ -1,26 +1,22 @@
-app.controller('VendedoresController', ['$scope', '$rootScope', '$modal', '$timeout', 'vendedoresService', 'sucursalesService', 'ngTableParams', '$filter', 'toaster', function($scope, $rootScope, $modal, $timeout , vendedoresService, sucursalesService, ngTableParams, $filter, toaster) {
+app.controller('SupervisoresController', ['$scope', '$rootScope', '$modal', '$timeout', 'supervisoresService', 'ngTableParams', '$filter', 'toaster', function($scope, $rootScope, $modal, $timeout , supervisoresService, ngTableParams, $filter, toaster) {
   
     $scope.data = [];
     $scope.table = [];
     $scope.sucursales = [];
-    $rootScope.pageTitle = "Vendedores";
+    $rootScope.pageTitle = "Supervisores";
     $scope.settings = {
-        singular: 'Vendedor',
-        plural: 'Vendedores',
-        modal: 'Crear Vendedor',
+        singular: 'Supervisor',
+        plural: 'Supervisores',
+        modal: 'Crear Supervisor',
         accion: 'Guardar'
     }
 
     function actualizar_datos()
     {
-        vendedoresService.getData('GET', {}).then(function(dataResponse) {
+        supervisoresService.getData('GET', {}).then(function(dataResponse) {
                 $scope.data = dataResponse.data.records;
                 $scope.table = dataResponse.data.records;
                 $scope.tableParams.reload();
-        });
-
-        sucursalesService.getData('GET', {}).then(function(dataResponse) {
-                $scope.sucursales = dataResponse.data.records;
         });
     }
 
@@ -41,7 +37,7 @@ app.controller('VendedoresController', ['$scope', '$rootScope', '$modal', '$time
 
                 searchStr = searchStr.toLowerCase();
                 $scope.table = $scope.data.filter(function(item) {
-                    return item.nombre.toLowerCase().indexOf(searchStr) > -1 || item.codigo.toLowerCase().indexOf(searchStr) > -1 || item.telefono.toLowerCase().indexOf(searchStr) > -1 || item.sucursal.codigo.toLowerCase().indexOf(searchStr) > -1 || item.sucursal.cadena.toLowerCase().indexOf(searchStr) > -1 || item.sucursal.tienda.toLowerCase().indexOf(searchStr) > -1 || item.sucursal.region.toLowerCase().indexOf(searchStr) > -1 || item.sucursal.supervisor.toLowerCase().indexOf(searchStr) > -1;
+                    return item.nombre.toLowerCase().indexOf(searchStr) > -1 || item.telefono.toLowerCase().indexOf(searchStr) > -1 || item.usuario.toLowerCase().indexOf(searchStr) > -1;
                 });
 
             } else {
@@ -59,7 +55,7 @@ app.controller('VendedoresController', ['$scope', '$rootScope', '$modal', '$time
         $scope.item = {};
         $scope.settings.accion = "Crear";
         modalInstance = $modal.open({
-            templateUrl: 'tpl/partials/modal-vendedor.html',
+            templateUrl: 'tpl/partials/modal-supervisor.html',
             scope: $scope,
             size: 'lg'
       });
@@ -68,22 +64,10 @@ app.controller('VendedoresController', ['$scope', '$rootScope', '$modal', '$time
     $scope.editItem = function(item)
     {
         $scope.item = item;
-        $scope.settings.modal = "Editar Puesto";
+        $scope.settings.modal = "Editar Supervisor";
         $scope.settings.accion = "Editar";
         modalInstance = $modal.open({
-            templateUrl: 'tpl/partials/modal-vendedor.html',
-            scope: $scope,
-            size: 'lg'
-        })
-    }
-
-    $scope.addPhone = function(item)
-    {
-        $scope.item = item;
-        $scope.settings.modal = "Agregar Telefonos";
-        $scope.settings.accion = "Agregar";
-        modalInstance = $modal.open({
-            templateUrl: 'tpl/partials/modal-telefonos.html',
+            templateUrl: 'tpl/partials/modal-supervisor.html',
             scope: $scope,
             size: 'lg'
         })
@@ -92,7 +76,7 @@ app.controller('VendedoresController', ['$scope', '$rootScope', '$modal', '$time
     $scope.deleteItem = function(item)
     {
         $scope.item = item;
-        $scope.settings.modal = "Eliminar Puesto";
+        $scope.settings.modal = "Eliminar Supervisor";
         $scope.settings.accion = "Eliminar";
         modalInstance = $modal.open({
             templateUrl: 'tpl/partials/modal-eliminar.html',
@@ -104,7 +88,7 @@ app.controller('VendedoresController', ['$scope', '$rootScope', '$modal', '$time
     $scope.bajaItem = function(item)
     {
         $scope.item = item;
-        $scope.settings.modal = "Baja Puesto";
+        $scope.settings.modal = "Baja Supervisor";
         $scope.settings.accion = "Dar baja";
         modalInstance = $modal.open({
             templateUrl: 'tpl/partials/modal-baja.html',
@@ -116,7 +100,7 @@ app.controller('VendedoresController', ['$scope', '$rootScope', '$modal', '$time
     $scope.altaItem = function(item)
     {
         $scope.item = item;
-        $scope.settings.modal = "Alta Puesto";
+        $scope.settings.modal = "Alta Supervisor";
         $scope.settings.accion = "Dar alta";
         modalInstance = $modal.open({
             templateUrl: 'tpl/partials/modal-alta.html',
@@ -134,7 +118,7 @@ app.controller('VendedoresController', ['$scope', '$rootScope', '$modal', '$time
     {
         if( $scope.settings.accion == "Crear" )
         {
-            vendedoresService.create( $scope.item ).then(function(dataResponse){
+            supervisoresService.create( $scope.item ).then(function(dataResponse){
 
                 if(dataResponse.data.result)
                 {
@@ -150,7 +134,7 @@ app.controller('VendedoresController', ['$scope', '$rootScope', '$modal', '$time
         }
         else if( $scope.settings.accion == "Editar" )
         {
-            vendedoresService.update( $scope.item ).then(function(dataResponse){
+            supervisoresService.update( $scope.item ).then(function(dataResponse){
 
                 if(dataResponse.data.result)
                 {
@@ -166,7 +150,7 @@ app.controller('VendedoresController', ['$scope', '$rootScope', '$modal', '$time
         }
         else if( $scope.settings.accion == "Eliminar" )
         {
-            vendedoresService.delete( $scope.item.id ).then(function(dataResponse){
+            supervisoresService.delete( $scope.item.id ).then(function(dataResponse){
 
                 if(dataResponse.data.result)
                 {
@@ -186,7 +170,7 @@ app.controller('VendedoresController', ['$scope', '$rootScope', '$modal', '$time
                 id: $scope.item.id,
                 estado: 1
             }
-            vendedoresService.update( data ).then(function(dataResponse){
+            supervisoresService.update( data ).then(function(dataResponse){
 
                 if(dataResponse.data.result)
                 {
@@ -206,7 +190,7 @@ app.controller('VendedoresController', ['$scope', '$rootScope', '$modal', '$time
                 id: $scope.item.id,
                 estado: 0
             }
-            vendedoresService.update( data ).then(function(dataResponse){
+            supervisoresService.update( data ).then(function(dataResponse){
 
                 if(dataResponse.data.result)
                 {
@@ -220,22 +204,7 @@ app.controller('VendedoresController', ['$scope', '$rootScope', '$modal', '$time
                 }
             })
         }
-    }
 
-    $scope.savePhone = function(event)
-    {
-        vendedoresService.createTelefono( $scope.item ).then(function(dataResponse){
-
-            if(dataResponse.data.result)
-            {
-                toaster.pop('success', 'Exito!', dataResponse.data.message);
-                $scope.item.telefonos.push( dataResponse.data.records );
-            }
-            else
-            {
-                toaster.pop('Error', 'Espera!', dataResponse.data.message);
-            }
-        });
     }
 
 }]);

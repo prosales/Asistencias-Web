@@ -30,7 +30,10 @@ app.controller('LoginController', ['$scope', '$http', '$state', 'localStorageSer
           $scope.authError = 'Usuario o password incorrecto';
         }else{
           localStorageService.cookie.set('login', response.data.records, 10);
-          $window.location.href = 'index.html';
+          if(response.data.records.tipo == 'Admin')
+            $window.location.href = 'index.html';
+          else
+            $window.location.href = 'index.html#/app/reportes';
         }
       }, function(x) {
         $scope.authError = 'Server Error';

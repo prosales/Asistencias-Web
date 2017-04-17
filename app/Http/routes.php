@@ -28,6 +28,10 @@ Route::group(["prefix"=>"ws"], function()
 	Route::any("mensajes/lista",		"AsistenciasController@mensajes");
 	Route::any("login",					"UsuariosController@login");
 	Route::any("loginmovil",			"VendedoresController@login");
+	Route::any("loginsupervisor",		"SupervisoresController@login");
+	Route::any("generar_password",		"VendedoresController@generar_password");
+	Route::any("validar_password",		"VendedoresController@validar_password");
+	Route::any("vendedor/ventas",		"AsistenciasController@reporte_ventas_vendedor");
 
 	Route::get("reporte_ventas",		"AsistenciasController@reporte_ventas");
 	Route::get("reporte_asistencias", 	"AsistenciasController@reporte_asistencias");
@@ -37,4 +41,5 @@ Route::group(["prefix"=>"ws"], function()
 	Route::resource("usuarios",			"UsuariosController");
 	Route::resource("vendedores",		"VendedoresController");
 	Route::resource("sucursales",		"SucursalesController");
+	Route::resource("supervisores",		"SupervisoresController");
 });

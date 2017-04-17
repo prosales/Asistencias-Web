@@ -34,6 +34,21 @@ angular.module('app')
                       }]
                   }
               })
+              .state('app.supervisores', {
+                  url: '/supervisores',
+                  templateUrl: 'tpl/supervisores.html',
+                  controller: 'SupervisoresController',
+                  resolve: {
+                      deps: ['$ocLazyLoad',
+                        function( $ocLazyLoad ){
+                          return $ocLazyLoad.load('toaster').then(
+                              function(){
+                                  return $ocLazyLoad.load('js/controllers/supervisores.js');
+                              }
+                          );
+                      }]
+                  }
+              })
               .state('app.vendedores', {
                   url: '/vendedores',
                   templateUrl: 'tpl/vendedores.html',

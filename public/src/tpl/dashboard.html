@@ -140,7 +140,7 @@
               <td >{{ item.nombre_vendedor }}</td>
               <td >{{ item.numero }}</td>
               <td >{{ item.monto }}</td>
-              <td >{{ item.incidencia == 0 ? 'No existe incidencia' : item.incidencia == 1 ? 'NM' : item.incidencia == 2 ? 'NN' : item.incidencia ? 'NP' : '' }}</td>
+              <td >{{ item.incidencia == 0 ? 'No existe incidencia' : item.incidencia == 1 ? 'NM' : item.incidencia == 2 ? 'NN' : item.incidencia == 3 ? 'NP' : item.incidencia == 4 ? 'Plan Postpago' : 'Pack' }}</td>
             </tr>
             </tbody>
           </table>

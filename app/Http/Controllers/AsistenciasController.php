@@ -458,4 +458,40 @@ class AsistenciasController extends Controller
         }
     }
 
+    public function reporte_ventas_vendedor(Request $request)
+    {
+        try
+        {
+            $fecha_inicio = $request->input("fecha_inicio");
+            $fecha_fin = $request->input("fecha_fin");
+            $id_vendedor = $request->input("id_vendedor");
+
+            $where = $fecha_inicio!="" && $fecha_fin!="" ? 
+                     "created_at BETWEEN '".date("Y-m-d", strtotime($fecha_inicio))." 00:00:00' AND '".date("Y-m-d", strtotime($fecha_fin))." 23:59:59'" :
+                     "created_at BETWEEN '".Carbon::now("America/Guatemala")->ToDateString()." 00:00:00' AND '".Carbon::now("America/Guatemala")->ToDateString()." 23:59:59'";
+
+            $statusCode     =   200;
+            $this->message  =   "Consultando registros";
+            $this->result   =   true;
+            $this->records  =   Reportes::whereRaw("id_vendedor = ? AND ".$where,[$id_vendedor])->get(); 
+        }
+        catch(\Exception $e)
+        {
+            $statusCode =   200;
+            $this->message  =   env( "APP_DEBUG" ) ? $e->getMessage() : "Ocurrio un problemas al consultar datos";
+            $this->result   =   false;
+        }
+        finally
+        {
+            $response = 
+            [
+                "message"   =>  $this->message,
+                "result"    =>  $this->result,
+                "records"   =>  $this->records
+            ];
+            
+            return response()->json( $response , $statusCode );
+        }
+    }
+
 }

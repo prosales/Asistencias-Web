@@ -3,8 +3,8 @@
 /* Controllers */
 
 angular.module('app')
-  .controller('AppCtrl', ['$scope', '$translate', '$localStorage', '$window', 'localStorageService',
-    function(              $scope,   $translate,   $localStorage,   $window, localStorageService ) {
+  .controller('AppCtrl', ['$scope', '$translate', '$localStorage', '$window', 'localStorageService', '$modal', '$http', 'APP',
+    function(              $scope,   $translate,   $localStorage,   $window, localStorageService, $modal, $http, APP ) {
 
       if (!localStorageService.cookie.get('login')) {
             $window.location.href = 'login.html';
@@ -12,8 +12,11 @@ angular.module('app')
       
       $scope.login = {
         nombre: localStorageService.cookie.get('login').nombre,
-        idusuario: localStorageService.cookie.get('login').id
+        idusuario: localStorageService.cookie.get('login').id,
+        tipo: localStorageService.cookie.get('login').tipo
       }
+
+      console.log($scope.login);
 
       // add 'ie' classes to html
       var isIE = !!navigator.userAgent.match(/MSIE/i);
@@ -25,6 +28,39 @@ angular.module('app')
       $scope.idusuario = localStorageService.cookie.get('login').id;
       $scope.idrol = localStorageService.cookie.get('login').idrol;
       $scope.idpuesto = localStorageService.cookie.get('login').idpuesto;
+
+      var modalInstance;
+
+      $scope.modalPassword = function()
+      {
+          modalInstance = $modal.open({
+              templateUrl: 'tpl/partials/modal-password.html',
+              scope: $scope,
+              size: 'lg'
+        });
+      }
+
+      $scope.cerrarModal = function()
+      {
+          modalInstance.close();
+      }
+
+      $scope.generarPassword = function()
+      {
+          $http.get(APP.api + 'generar_password').then(function(dataResponse){
+
+              if(dataResponse.data.result)
+              {
+                $scope.generar = { password : dataResponse.data.records.password};
+              }
+              else
+              {
+                alert(dataResponse.data.message);
+              }
+
+          });
+      }
+
       // config
       $scope.app = {
         name: 'Asistencias',

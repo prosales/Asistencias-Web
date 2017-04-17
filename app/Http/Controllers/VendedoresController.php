@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use DB;
 use App\Vendedores;
 use App\Telefonos;
+use App\Passwords;
 use Carbon\Carbon;
 
 class VendedoresController extends Controller
@@ -140,6 +141,7 @@ class VendedoresController extends Controller
                 $record->id_sucursal                =   $request->input( 'id_sucursal', $record->id_sucursal );
                 $record->usuario                    =   $request->input( 'usuario', $record->usuario );
                 $record->password                   =   $request->input( 'password', $record->password );
+                $record->estado                     =   $request->input( 'estado', $record->estado );
                 
                 $record->save();
                 return $record;                                 
@@ -317,6 +319,75 @@ class VendedoresController extends Controller
             ];
             
             return response()->json($response, $this->statusCode);
+        }
+    }
+
+    public function generar_password()
+    {
+        try
+        {
+            $registro = Passwords::find(1);
+            $registro->password = strtoupper(str_random(10));
+            $registro->save();
+
+            $this->records     =   $registro;
+            $this->message     =   "Contraseña generada correctamente";
+            $this->result      =   true;
+            $this->statusCode  =   200;
+        }
+        catch (\Exception $e)
+        {
+            $this->statusCode   =   200;
+            $this->message      =   env('APP_DEBUG')?$e->getMessage():'Ocurrio un problema al generar contraseña';
+            $this->result       =   false;
+        }
+        finally
+        {
+            $IndexRespuesta = 
+            [
+                'records'   =>  $this->records,
+                'message'   =>  $this->message,
+                'result'    =>  $this->result,
+            ];
+            
+            return response()->json($IndexRespuesta, $this->statusCode);
+        }
+    }
+
+    public function validar_password(Request $request)
+    {
+        try
+        {
+            $registro = Passwords::where("password", strtoupper($request->input("password")))->first();
+            
+            if($registro)
+            {
+                $this->message     =   "Contraseña válida";
+                $this->result      =   true;
+                $this->statusCode  =   200;
+            }
+            else
+            {
+                $this->message     =   "Contraseña inválida";
+                $this->result      =   false;
+                $this->statusCode  =   200;
+            }
+        }
+        catch (\Exception $e)
+        {
+            $this->statusCode   =   200;
+            $this->message      =   env('APP_DEBUG')?$e->getMessage():'Ocurrio un problema al generar contraseña';
+            $this->result       =   false;
+        }
+        finally
+        {
+            $respuesta = 
+            [
+                'message'   =>  $this->message,
+                'result'    =>  $this->result,
+            ];
+            
+            return response()->json($respuesta, $this->statusCode);
         }
     }
 

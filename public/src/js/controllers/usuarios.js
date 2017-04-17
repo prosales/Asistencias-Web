@@ -2,6 +2,7 @@ app.controller('UsuariosController', ['$scope', '$rootScope', '$modal', '$timeou
   
     $scope.data = [];
     $scope.table = [];
+    $scope.tipos = ["Admin","Consulta"];
     $rootScope.pageTitle = "Usuarios";
     $scope.settings = {
         singular: 'Usuario',
@@ -54,6 +55,7 @@ app.controller('UsuariosController', ['$scope', '$rootScope', '$modal', '$timeou
     {
         $scope.item = {};
         $scope.settings.accion = "Crear";
+        console.log($scope.tipos);
         modalInstance = $modal.open({
             templateUrl: 'tpl/partials/modal-usuario.html',
             scope: $scope,
