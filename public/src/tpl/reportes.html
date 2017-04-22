@@ -9,6 +9,7 @@
     <ul class="nav nav-tabs" role="tablist">
       <li ng-class="moduloTab == 1 ? 'active' : ''" ng-click="selectedTab(1)"><a data-toggle="tab" >Reporte de ventas</a></li>
       <li ng-class="moduloTab == 2 ? 'active' : ''" ng-click="selectedTab(2)"><a data-toggle="tab" >Reporte de asistencias</a></li>
+      <li ng-class="moduloTab == 3 ? 'active' : ''" ng-click="selectedTab(3)"><a data-toggle="tab" >Reporte de marcajes</a></li>
     </ul>
     <div class="tab-content">
 
@@ -99,6 +100,61 @@
                 <td>{{ item.cadena }}</td>
                 <td>{{ item.canal }}</td>
                 <td ng-repeat="asistencia in item.asistencias">{{ asistencia.asistio }}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-pane " ng-class="moduloTab == 3 ? 'active' : ''">
+        <div class="row mb20">
+          <div class="col-sm-3">
+            <input type="date" ng-model="filtro_marcajes.fecha" class="form-control" placeholder="Fecha" />
+          </div>
+          <div class="col-sm-3">
+            <button class="btn btn-info" ng-click="consultar_marcajes()">Buscar</button>
+            <button class="btn btn-success" ng-click="exportar_marcajes()">Exportar Excel</button>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-12">
+          <div class="table-responsive">
+            <table id="tabla-registros" class="table table-striped">
+              <thead>
+              <tr>
+                <th>CEMP</th>
+                <th>COD PDV</th>
+                <th>COD VENDEDOR</th>
+                <th>TIENDA</th>
+                <th>ASESOR</th>
+                <th>NUMERO STAFF</th>
+                <th>SUPERVISOR</th>
+                <th>CADENA</th>
+                <th>CANAL</th>
+                <th>ENTRADA PDV</th>
+                <th>SALIDA ALMUERZO</th>
+                <th>ENTRADA ALMUERZO</th>
+                <th>SALIDA PDV</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr ng-repeat="item in marcajes">
+                <td>{{ item.cemp }}</td>
+                <td>{{ item.codigo_pdv }}</td>
+                <td>{{ item.codigo_vendedor }}</td>
+                <td>{{ item.tienda }}</td>
+                <td>{{ item.nombre_vendedor }}</td>
+                <td>{{ item.numero_staff }}</td>
+                <td>{{ item.supervisor }}</td>
+                <td>{{ item.cadena }}</td>
+                <td>{{ item.canal }}</td>
+                <td>{{ item.entrada_pdv > 0 ? 'X' : '' }}</td>
+                <td>{{ item.salida_almuerzo > 0 ? 'X' : '' }}</td>
+                <td>{{ item.entrada_almuerzo > 0 ? 'X' : '' }}</td>
+                <td>{{ item.salida_pdv > 0 ? 'X' : '' }}</td>
               </tr>
               </tbody>
             </table>

@@ -26,4 +26,16 @@ app.service('reportesService',['$http', 'APP',  function($http, APP) {
         });
     };
 
+    this.getMarcajes = function(metodo, parametros) {
+
+        return $http({
+            method: metodo,
+            url: APP.api + 'reporte_marcajes',
+            params: parametros,
+            headers: {
+                'Authorization': 'Token token=xxxxYYYYZzzz'
+            }
+        });
+    };
+
 }]);

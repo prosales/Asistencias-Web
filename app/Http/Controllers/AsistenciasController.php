@@ -355,8 +355,8 @@ class AsistenciasController extends Controller
     {
     	try
     	{
-    		$fecha_inicio = $request->input("fecha_inicio") != "" ? date("Y-m-d", strtotime($request->input("fecha_inicio"))) : Carbon::now()->toDateString();
-    		$fecha_fin = $request->input("fecha_fin") != "" ? date("Y-m-d", strtotime($request->input("fecha_fin"))) : Carbon::now()->toDateString();
+    		$fecha_inicio = $request->input("fecha_inicio") != "" ? date("Y-m-d", strtotime($request->input("fecha_inicio"))) : Carbon::now("America/Guatemala")->toDateString();
+    		$fecha_fin = $request->input("fecha_fin") != "" ? date("Y-m-d", strtotime($request->input("fecha_fin"))) : Carbon::now("America/Guatemala")->toDateString();
 
     		$vendedores = ViewVendedores::all();
     		$asistencias = [];
@@ -413,6 +413,44 @@ class AsistenciasController extends Controller
     	}
     }
 
+    public function reporte_marcajes(Request $request)
+    {
+        try
+        {
+            $fecha = $request->input("fecha") != "" && $request->input("fecha") != 'undefined' ? date("Y-m-d", strtotime($request->input("fecha"))) : Carbon::now("America/Guatemala")->toDateString();
+
+            $vendedores = ViewVendedores::select(DB::raw("view_vendedores.*, 
+                (SELECT count(id) FROM asistencias WHERE asistencias.id_vendedor = view_vendedores.id_vendedor AND tipo = 1 AND created_at BETWEEN '".$fecha." 00:00:00' AND '".$fecha." 23:59:59') as entrada_pdv,
+                (SELECT count(id) FROM asistencias WHERE asistencias.id_vendedor = view_vendedores.id_vendedor AND tipo = 2 AND created_at BETWEEN '".$fecha." 00:00:00' AND '".$fecha." 23:59:59') as salida_almuerzo,
+                (SELECT count(id) FROM asistencias WHERE asistencias.id_vendedor = view_vendedores.id_vendedor AND tipo = 3 AND created_at BETWEEN '".$fecha." 00:00:00' AND '".$fecha." 23:59:59') as entrada_almuerzo,
+                (SELECT count(id) FROM asistencias WHERE asistencias.id_vendedor = view_vendedores.id_vendedor AND tipo = 4 AND created_at BETWEEN '".$fecha." 00:00:00' AND '".$fecha." 23:59:59') as salida_pdv
+                "))
+            ->get(); 
+
+            $statusCode = 200;
+            $this->result = true;
+            $this->message = "Registros consultados";
+            $this->records = $vendedores;
+        }
+        catch(\Exception $e)
+        {
+            $statusCode =   200;
+            $this->message  =   env( "APP_DEBUG" ) ? $e->getMessage() : "Ocurrio un problemas al consultar datos";
+            $this->result   =   false;
+        }
+        finally
+        {
+            $response = 
+            [
+                "message"   =>  $this->message,
+                "result"    =>  $this->result,
+                "records"   =>  $this->records
+            ];
+            
+            return response()->json( $response , $statusCode );
+        }
+    }
+
     public function exportar_ventas(Request $request)
     {
         try
@@ -447,6 +485,36 @@ class AsistenciasController extends Controller
                 $excel->sheet('Asistencias', function($sheet) {
 
                     $sheet->loadView('reportes.asistencias');
+
+                });
+
+            })->export("xlsx");
+        }
+        catch(\Exception $e)
+        {
+            echo $e->getMessage();
+        }
+    }
+
+    public function exportar_marcajes(Request $request)
+    {
+        try
+        {
+            $fecha = $request->input("fecha") != "" && $request->input("fecha") != 'undefined' ? date("Y-m-d", strtotime($request->input("fecha"))) : Carbon::now("America/Guatemala")->toDateString();
+
+            $vendedores = ViewVendedores::select(DB::raw("view_vendedores.*, 
+                (SELECT count(id) FROM asistencias WHERE asistencias.id_vendedor = view_vendedores.id_vendedor AND tipo = 1 AND created_at BETWEEN '".$fecha." 00:00:00' AND '".$fecha." 23:59:59') as entrada_pdv,
+                (SELECT count(id) FROM asistencias WHERE asistencias.id_vendedor = view_vendedores.id_vendedor AND tipo = 2 AND created_at BETWEEN '".$fecha." 00:00:00' AND '".$fecha." 23:59:59') as salida_almuerzo,
+                (SELECT count(id) FROM asistencias WHERE asistencias.id_vendedor = view_vendedores.id_vendedor AND tipo = 3 AND created_at BETWEEN '".$fecha." 00:00:00' AND '".$fecha." 23:59:59') as entrada_almuerzo,
+                (SELECT count(id) FROM asistencias WHERE asistencias.id_vendedor = view_vendedores.id_vendedor AND tipo = 4 AND created_at BETWEEN '".$fecha." 00:00:00' AND '".$fecha." 23:59:59') as salida_pdv
+                "))
+            ->get();
+
+            \Excel::create('reporte_marcajes', function($excel) use($vendedores){
+
+                $excel->sheet(date("d.m.Y"), function($sheet) use($vendedores){
+
+                    $sheet->loadView('reportes.marcajes')->with("vendedores",$vendedores);
 
                 });
 

@@ -35,8 +35,10 @@ Route::group(["prefix"=>"ws"], function()
 
 	Route::get("reporte_ventas",		"AsistenciasController@reporte_ventas");
 	Route::get("reporte_asistencias", 	"AsistenciasController@reporte_asistencias");
+	Route::get("reporte_marcajes",		"AsistenciasController@reporte_marcajes");
 	Route::get("exportar_ventas",		"AsistenciasController@exportar_ventas");
 	Route::get("exportar_asistencias",	"AsistenciasController@exportar_asistencias");
+	Route::get("exportar_marcajes",		"AsistenciasController@exportar_marcajes");
 
 	Route::resource("usuarios",			"UsuariosController");
 	Route::resource("vendedores",		"VendedoresController");

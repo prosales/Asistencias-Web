@@ -99,8 +99,7 @@
           <table id="tabla-registros" ng-table="tableParams" class="table table-striped" template-pagination="tpl/blocks/pagination.html">
             <tbody>
             <tr ng-repeat="(key, item) in $data">
-              <td data-title="'#'" filter="{ 'id': 'text' }" sortable="'id'" >{{ item.id }}</td>
-              <td data-title="'Telefono'" filter="{ 'telefono': 'text' }" >{{ item.numero }}</td>
+              <td data-title="'Telefono'" filter="{ 'telefono': 'text' }" >{{ item.telefono }}</td>
               <td data-title="'Vendedor'" filter="{ 'vendedor': 'text' }" >{{ item.nombre_vendedor }}</td>
               <td data-title="'Marcaje'" filter="{ 'marcaje': 'text' }" >{{ item.entrada }}</td>
               <td data-title="'Latitud'" filter="{ 'latitud': 'text' }" >{{ item.latitud }}</td>
@@ -123,7 +122,6 @@
           <table id="tabla-registros-reportes" class="table table-striped">
           	<thead>
           	<tr>
-          		<th>#</th>
           		<th>Telefono Vendedor</th>
               <th>Codigo Vendedor</th>
           		<th>Nombre Vendedor</th>
@@ -134,7 +132,6 @@
           	</thead>
             <tbody>
             <tr ng-repeat="(key, item) in dataReportes">
-              <td >{{ item.id }}</td>
               <td >{{ item.telefono }}</td>
               <td >{{ item.codigo_vendedor }}</td>
               <td >{{ item.nombre_vendedor }}</td>

@@ -17,6 +17,7 @@ app.controller('ReportesController', ['$scope', '$rootScope', '$modal', '$timeou
 
     var fechas_ventas = { fecha_inicio: "", fecha_fin: ""};
     var fechas_asistencias = { fecha_inicio: "", fecha_fin: ""};
+    var fechas_marcajes = { fecha: "" };
 
     $scope.$watch('filtro_ventas.fecha_inicio', function (newValue) {
         fechas_ventas.fecha_inicio = $filter('date')(newValue, 'yyyy/MM/dd'); 
@@ -29,6 +30,9 @@ app.controller('ReportesController', ['$scope', '$rootScope', '$modal', '$timeou
     });
     $scope.$watch('filtro_asistencias.fecha_fin', function (newValue) {
         fechas_asistencias.fecha_fin = $filter('date')(newValue, 'yyyy/MM/dd'); 
+    });
+    $scope.$watch('filtro_marcajes.fecha', function (newValue) {
+        fechas_marcajes.fecha = $filter('date')(newValue, 'yyyy/MM/dd'); 
     });
 
     $scope.selectedTab = function(n) {
@@ -86,6 +90,17 @@ app.controller('ReportesController', ['$scope', '$rootScope', '$modal', '$timeou
         });
     }
 
+    $scope.consultar_marcajes = function()
+    {
+        reportesService.getMarcajes("GET", $scope.filtro_marcajes).then( function(dataResponse){
+
+            if(dataResponse.data.result)
+            {
+                $scope.marcajes = dataResponse.data.records;
+            }
+        });
+    }
+
     $scope.exportar_ventas = function()
     {
         if(fechas_ventas.fecha_inicio!="" && fechas_ventas.fecha_fin!="")
@@ -100,6 +115,14 @@ app.controller('ReportesController', ['$scope', '$rootScope', '$modal', '$timeou
             $window.open(ruta+'ws/exportar_asistencias?fecha_inicio='+fechas_asistencias.fecha_inicio+'&fecha_fin='+fechas_asistencias.fecha_fin, '_blank');
         else
             $window.open(ruta+'ws/exportar_asistencias', '_blank');
+    }
+
+    $scope.exportar_marcajes = function()
+    {
+        if(fechas_marcajes.fecha!="")
+            $window.open(ruta+'ws/exportar_marcajes?fecha='+fechas_marcajes.fecha, '_blank');
+        else
+            $window.open(ruta+'ws/exportar_marcajes', '_blank');
     }
 
 }]);
