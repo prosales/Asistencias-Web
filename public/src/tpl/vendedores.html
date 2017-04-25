@@ -29,6 +29,7 @@
               <td data-title="'Tienda'" filter="{ 'tienda': 'text' }" sortable="'tienda'" >{{ item.sucursal.tienda }}</td>
               <td data-title="'Region'" filter="{ 'region': 'text' }" sortable="'region'" >{{ item.sucursal.region }}</td>
               <td data-title="'Supervisor'" filter="{ 'supervisor': 'text' }" sortable="'supervisor'" >{{ item.sucursal.supervisor }}</td>
+              <td data-title="'Supervisor Asignado'" filter="{ 'supervisor': 'text' }" sortable="'supervisor'" >{{ item.supervisor!=null ? item.supervisor.nombre : 'No asignado' }}</td>
               <td data-title="'Estado'" filter="{ 'estado': 'text' }" sortable="'estado'" >{{ item.estado == 1 ? 'Activo' : 'Inactivo' }}</td>
               <td data-title="'Acciones'">
                 <button type="button" ng-click="editItem(item)" class="btn btn-xs btn-info">

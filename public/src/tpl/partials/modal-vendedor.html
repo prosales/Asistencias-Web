@@ -29,6 +29,11 @@
 	    <select class="form-control" ng-model="item.id_sucursal" ng-options="sucursal.id as ( sucursal.cadena + ' - ' + sucursal.tienda ) for sucursal in sucursales" required>
 	    </select>
 	</div>
+	<div class="form-group">
+	    <label>Supervisor</label>
+	    <select class="form-control" ng-model="item.id_supervisor" ng-options="supervisor.id as supervisor.nombre for supervisor in supervisores" required>
+	    </select>
+	</div>
 
 </div>
 <div class="modal-footer">                  

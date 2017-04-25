@@ -1,8 +1,9 @@
-app.controller('VendedoresController', ['$scope', '$rootScope', '$modal', '$timeout', 'vendedoresService', 'sucursalesService', 'ngTableParams', '$filter', 'toaster', function($scope, $rootScope, $modal, $timeout , vendedoresService, sucursalesService, ngTableParams, $filter, toaster) {
+app.controller('VendedoresController', ['$scope', '$rootScope', '$modal', '$timeout', 'vendedoresService', 'sucursalesService', 'supervisoresService', 'ngTableParams', '$filter', 'toaster', function($scope, $rootScope, $modal, $timeout , vendedoresService, sucursalesService, supervisoresService, ngTableParams, $filter, toaster) {
   
     $scope.data = [];
     $scope.table = [];
     $scope.sucursales = [];
+    $scope.supervisores = [];
     $rootScope.pageTitle = "Vendedores";
     $scope.settings = {
         singular: 'Vendedor',
@@ -21,6 +22,10 @@ app.controller('VendedoresController', ['$scope', '$rootScope', '$modal', '$time
 
         sucursalesService.getData('GET', {}).then(function(dataResponse) {
                 $scope.sucursales = dataResponse.data.records;
+        });
+
+        supervisoresService.getData('GET', {}).then(function(dataResponse) {
+                $scope.supervisores = dataResponse.data.records;
         });
     }
 

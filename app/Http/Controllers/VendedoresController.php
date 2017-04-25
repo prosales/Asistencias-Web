@@ -21,7 +21,7 @@ class VendedoresController extends Controller
     {
         try
         {
-            $this->records     =   Vendedores::with("sucursal")->get();
+            $this->records     =   Vendedores::with("sucursal","supervisor")->get();
             $this->message     =   "Consulta exitosa";
             $this->result      =   true;
             $this->statusCode  =   200;
@@ -96,6 +96,7 @@ class VendedoresController extends Controller
             if($registro)
             {
                 $registro->sucursal;
+                $registro->supervisor;
                 $this->records      =   $registro;
                 $this->message      =   "Consulta exitosa";
                 $this->result       =   true;

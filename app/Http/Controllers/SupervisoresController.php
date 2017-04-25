@@ -6,6 +6,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use DB;
 use App\Supervisores;
+use App\ViewVendedores;
 use Carbon\Carbon;
 
 class SupervisoresController extends Controller
@@ -220,6 +221,45 @@ class SupervisoresController extends Controller
                 $this->message      =   "El usuario y password es obligatorio";
                 $this->statusCode   =   200;
             }
+        }
+        catch (\Exception $e)
+        {
+            $this->statusCode   =   200;
+            $this->message      =   env('APP_DEBUG')?$e->getMessage():'Registro no se actualizo';
+            $this->result       =   false;
+        }
+        finally
+        {
+            $response = 
+            [
+                'message'   =>  $this->message,
+                'result'    =>  $this->result,
+                'records'   =>  $this->records
+            ];
+            
+            return response()->json($response, $this->statusCode);
+        }
+    }
+
+    public function entradas_vendedores(Request $request)
+    {
+        try
+        {
+            $fecha = Carbon::now("America/Guatemala")->toDateString();
+            
+            $registros = ViewVendedores::select(DB::raw("view_vendedores.*, 
+                (SELECT count(id) FROM asistencias WHERE asistencias.id_vendedor = view_vendedores.id_vendedor AND tipo = 1 AND created_at BETWEEN '".$fecha." 00:00:00' AND '".$fecha." 23:59:59') as entrada_pdv,
+                (SELECT count(id) FROM asistencias WHERE asistencias.id_vendedor = view_vendedores.id_vendedor AND tipo = 2 AND created_at BETWEEN '".$fecha." 00:00:00' AND '".$fecha." 23:59:59') as salida_almuerzo,
+                (SELECT count(id) FROM asistencias WHERE asistencias.id_vendedor = view_vendedores.id_vendedor AND tipo = 3 AND created_at BETWEEN '".$fecha." 00:00:00' AND '".$fecha." 23:59:59') as entrada_almuerzo,
+                (SELECT count(id) FROM asistencias WHERE asistencias.id_vendedor = view_vendedores.id_vendedor AND tipo = 4 AND created_at BETWEEN '".$fecha." 00:00:00' AND '".$fecha." 23:59:59') as salida_pdv
+                "))
+            ->where("id_supervisor", $request->input("id_supervisor"))
+            ->get();
+
+            $this->records = $registros;
+            $this->result = true;
+            $this->message = "Consulta exitosa";
+            $this->statusCode = 200;
         }
         catch (\Exception $e)
         {

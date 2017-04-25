@@ -29,6 +29,7 @@ Route::group(["prefix"=>"ws"], function()
 	Route::any("login",					"UsuariosController@login");
 	Route::any("loginmovil",			"VendedoresController@login");
 	Route::any("loginsupervisor",		"SupervisoresController@login");
+	Route::any("marcajes/vendedores",	"SupervisoresController@entradas_vendedores");
 	Route::any("generar_password",		"VendedoresController@generar_password");
 	Route::any("validar_password",		"VendedoresController@validar_password");
 	Route::any("vendedor/ventas",		"AsistenciasController@reporte_ventas_vendedor");
