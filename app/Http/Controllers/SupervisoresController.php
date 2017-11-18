@@ -253,7 +253,7 @@ class SupervisoresController extends Controller
                 (SELECT count(id) FROM asistencias WHERE asistencias.id_vendedor = view_vendedores.id_vendedor AND tipo = 3 AND created_at BETWEEN '".$fecha." 00:00:00' AND '".$fecha." 23:59:59') as entrada_almuerzo,
                 (SELECT count(id) FROM asistencias WHERE asistencias.id_vendedor = view_vendedores.id_vendedor AND tipo = 4 AND created_at BETWEEN '".$fecha." 00:00:00' AND '".$fecha." 23:59:59') as salida_pdv
                 "))
-            ->where("id_supervisor", $request->input("id_supervisor"))
+            ->whereRaw("view_vendedores.id_supervisor = ?", [$request->input("id_supervisor")])
             ->get();
 
             $this->records = $registros;

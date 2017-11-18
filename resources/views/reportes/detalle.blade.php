@@ -13,7 +13,9 @@
 
     $records  =   Reportes::select("reportes.*")->whereRaw($where)->with("vendedor")
          				    ->leftJoin("vendedores", "vendedores.id", "=", "reportes.id_vendedor")
-         				    ->orderBy("vendedores.codigo_empleado","ASC")->get();
+         				    ->whereRaw("vendedores.estado = 1")
+         				    ->orderBy("vendedores.codigo_empleado","ASC")
+         				    ->get();
 
 ?>
 
@@ -39,6 +41,7 @@
 	</thead>
 	<tbody>
 	@foreach($records as $item)
+	<?php  if($item->vendedor==null){dd($item);} ?>
 		<tr>
 			<td>{{$item->vendedor->cemp}}</td>
 			<td>{{$item->vendedor->codigo_pdv}}</td>
@@ -54,7 +57,7 @@
 			<td>{{$item->numero}}</td>
 			<td>{{$item->monto}}</td>
 			<td>{{$item->incidencia == 0 ? 'No existe incidencia' : $item->incidencia == 1 ? 'NM' : $item->incidencia == 2 ? 'NN' : $item->incidencia ? 'NP' : ''}}</td>
-			<td><a href="http://190.151.129.244/asistencias/public/contenido/{{$item->foto}}" >{{$item->foto}}</a></td>
+			<td><a href="http://190.151.129.244/asistencias/public/contenido/{{$item->foto}}" >http://190.151.129.244/asistencias/public/contenido/{{$item->foto}}</a></td>
 		</tr>
 	@endforeach
 	</tbody>

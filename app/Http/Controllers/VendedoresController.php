@@ -51,6 +51,10 @@ class VendedoresController extends Controller
         {
             $Registro   =   DB::transaction(function() use ($request)
             {
+                $validar = Vendedores::where('usuario', $request->input( 'usuario' ))->first();
+                if($validar)
+                    throw new \Exception('El usuario ingresado ya existe');
+
                 $Registro = Vendedores::create
                 ([
                     'nombre'            =>  $request->input( 'nombre' ),
@@ -58,6 +62,7 @@ class VendedoresController extends Controller
                     'codigo_empleado'   =>  $request->input( 'codigo_empleado', '' ),
                     'telefono'          =>  $request->input( 'telefono' ),
                     'id_sucursal'       =>  $request->input( 'id_sucursal' ),
+                    'id_supervisor'     =>  $request->input( 'id_supervisor', '0' ),
                     'usuario'           =>  $request->input( 'usuario' ),
                     'password'          =>  $request->input( 'password' )
                 ]);
@@ -135,6 +140,10 @@ class VendedoresController extends Controller
         {
             $Registro   =   DB::transaction(function() use ($request,$id)
             {
+                $validar = Vendedores::whereRaw('usuario = ? AND id != ?', [$request->input( 'usuario' ), $id])->first();
+                if($validar)
+                    throw new \Exception('El usuario ingresado ya existe');
+
                 $record                             =   Vendedores::find($id);
                 $record->nombre                     =   $request->input( 'nombre', $record->nombre );
                 $record->codigo                     =   $request->input( 'codigo', $record->codigo );
@@ -143,6 +152,7 @@ class VendedoresController extends Controller
                 $record->usuario                    =   $request->input( 'usuario', $record->usuario );
                 $record->password                   =   $request->input( 'password', $record->password );
                 $record->estado                     =   $request->input( 'estado', $record->estado );
+                $record->id_supervisor				=	$request->input( 'id_supervisor', $record->id_supervisor );
                 
                 $record->save();
                 return $record;                                 
@@ -328,7 +338,7 @@ class VendedoresController extends Controller
         try
         {
             $registro = Passwords::find(1);
-            $registro->password = strtoupper(str_random(10));
+            $registro->password = strtoupper(str_random(5));
             $registro->save();
 
             $this->records     =   $registro;
@@ -363,6 +373,10 @@ class VendedoresController extends Controller
             
             if($registro)
             {
+                $registro = Passwords::find(1);
+                $registro->password = strtoupper(str_random(5));
+                $registro->save();
+                
                 $this->message     =   "Contraseña válida";
                 $this->result      =   true;
                 $this->statusCode  =   200;

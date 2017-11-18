@@ -46,7 +46,7 @@ app.controller('VendedoresController', ['$scope', '$rootScope', '$modal', '$time
 
                 searchStr = searchStr.toLowerCase();
                 $scope.table = $scope.data.filter(function(item) {
-                    return item.nombre.toLowerCase().indexOf(searchStr) > -1 || item.codigo.toLowerCase().indexOf(searchStr) > -1 || item.telefono.toLowerCase().indexOf(searchStr) > -1 || item.sucursal.codigo.toLowerCase().indexOf(searchStr) > -1 || item.sucursal.cadena.toLowerCase().indexOf(searchStr) > -1 || item.sucursal.tienda.toLowerCase().indexOf(searchStr) > -1 || item.sucursal.region.toLowerCase().indexOf(searchStr) > -1 || item.sucursal.supervisor.toLowerCase().indexOf(searchStr) > -1;
+                    return item.nombre.toLowerCase().indexOf(searchStr) > -1 || item.codigo.toLowerCase().indexOf(searchStr) > -1 || item.sucursal.codigo.toLowerCase().indexOf(searchStr) > -1 || item.sucursal.cadena.toLowerCase().indexOf(searchStr) > -1 || item.sucursal.tienda.toLowerCase().indexOf(searchStr) > -1 || item.sucursal.region.toLowerCase().indexOf(searchStr) > -1 || item.sucursal.supervisor.toLowerCase().indexOf(searchStr) > -1;
                 });
 
             } else {

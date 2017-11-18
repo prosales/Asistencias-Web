@@ -45,4 +45,5 @@ Route::group(["prefix"=>"ws"], function()
 	Route::resource("vendedores",		"VendedoresController");
 	Route::resource("sucursales",		"SucursalesController");
 	Route::resource("supervisores",		"SupervisoresController");
+	Route::resource("marcas",			"MarcasController");
 });
